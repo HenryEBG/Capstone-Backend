@@ -4,6 +4,10 @@ require('dotenv').config();
 const express = require('express');
 // Creating the express server and storing inside the app variable
 const app = express();
+
+//use cors to let calls from other server
+// app.use(cors())
+
 // Port in which the server will run on
 const PORT = process.env.PORT || 8000;
 // Requiring example router
@@ -19,7 +23,8 @@ app.use((req, res, next) => {
 });
 
 // Connecting the router to the server
-app.use('/users', userRouter);
+app.use('/api/users', userRouter);
+
 
 // Error Handling Middlware
 app.use((err, req, res, next) => {
