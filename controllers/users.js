@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const bcrypt = require('../node_modules/bcryptjs');
+// import bcrypt form 'bcryptjs'
 
 module.exports = {
   createUser,listUsers,loginUser,deleteUser,modifyUser,showUser
@@ -6,8 +8,11 @@ module.exports = {
 
 async function createUser(req, res) {
   try {
+
+    req.body.password=await bcrypt.hash(req.body.password,10);
     const createdUser = await User.create(req.body);
     if (createdUser) {
+      createdUser.password="";
       res.status(201).send(createdUser);
     }
   } catch (err) {
