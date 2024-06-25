@@ -1,34 +1,66 @@
 const User = require('../models/User');
 const bcrypt = require('../node_modules/bcryptjs');
-// import bcrypt form 'bcryptjs'
+const { createToken } = require('../config/jwt.js');
+
+
 
 module.exports = {
-  createUser,listUsers,loginUser,deleteUser,modifyUser,showUser
+  createUser, listUsers, loginUser, deleteUser, updateUser, showUser,logoutUser
 };
 
 async function createUser(req, res) {
   try {
-
-    req.body.password=await bcrypt.hash(req.body.password,10);
+    // generate a hash from the password
+    req.body.password = await bcrypt.hash(req.body.password, 10);
+    //create the user
     const createdUser = await User.create(req.body);
-    if (createdUser) {
-      createdUser.password="";
-      res.status(201).send(createdUser);
-    }
+    // create the token for manage session
+    const token = await createToken({ id: createdUser._id });
+    //console.log(token)
+    // erase the passoword from the createdUser to not return the password for security
+    createdUser.password = "";
+    res.cookie("token", token);
+    //we make the response to the client
+    res.status(201).send(createdUser);
   } catch (err) {
     res.status(400).json(err);
   }
 }
 
-async function modifyUser(req, res) {
+async function loginUser(req, res) {
   try {
-    const modifyUser = await User.find({'_id':req.params.id})
+    const foundUser = await User.findOne({ 'username': req.body.username });
 
-    // const createdUser = await User.create(req.params);
-    // if (createdUser) {
-    //   res.status(201).send(createdUser);
-    // }
-    res.status(201).send("modificado");
+    if (!foundUser) return res.status(400).json({ message: "Bad credentials,please check your username and password" })
+    const isPassword = await bcrypt.compare(req.body.password, foundUser.password);
+    console.log(isPassword)
+    if (!isPassword) return res.status(400).json({ message: "Bad credentials,please check your username and password" })
+    const token = await createToken({ id: foundUser._id });
+    res.cookie("token", token);
+    foundUser.password = "";
+    //we make the response to the client
+    res.status(201).send(foundUser);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+
+}
+
+async function logoutUser(req,res) {
+  try {
+    res.cookie("token","",{expires:new Date(0)})
+    res.sendStatus(200)  
+  } catch (err) {
+    res.status(400).json(err)
+  }
+  
+}
+
+async function updateUser(req, res) {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(req.params.id,req.body)
+    if(!updateUser) res.status(404).json("User not found");
+      res.status(201).send('Updated User');
   } catch (err) {
     res.status(400).json(err);
   }
@@ -36,46 +68,35 @@ async function modifyUser(req, res) {
 
 async function deleteUser(req, res) {
   try {
-    const modifyUser = await User.find({'_id':req.params.id})
-
-    // const createdUser = await User.create(req.params);
-    // if (createdUser) {
-    //   res.status(201).send(createdUser);
-    // }
-    res.status(201).send("eliminado");
+    const deletedUser = await User.findByIdAndDelete( req.params.id)
+    if(!deletedUser) res.status(404).json("User not found");
+      res.status(201).send('User deleted');
   } catch (err) {
     res.status(400).json(err);
   }
 }
-async function listUsers(req,res) {
+async function listUsers(req, res) {
   try {
-    res.send('listar users')
     const users = await User.find();
-     res.status(200).json(users);
+    if(!users) return res.status(404).json("Users not found")
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(400).json(err);
+  }
+}
+
+async function showUser(req, res) {
+  try {
+
+    const userFound = await User.findById(req.params.id);
+    if(!userFound) return res.status(400).json({message:"User not found"})
+      userFound.password=""
+      res.status(200).json(userFound);
   } catch (error) {
     res.status(400).json('No Beuno:(');
   }
 }
 
-async function showUser(req,res) {
-  try {
-    //res.send('listar users')
-    const theUser = await User.find({'_id':req.params.id});
-     res.status(200).json(theUser);
-  } catch (error) {
-    res.status(400).json('No Beuno:(');
-  }
-}
 
-async function loginUser(req,res){
-  try {
-    //console.log(req.body)
-    const theUser = await User.find({'username':req.body.username, 'password':req.body.password});
-    res.send('login user')    
-  } catch (error) {
-    res.status(400).json('No Beuno:(');
-  }
-  
-}
 
 

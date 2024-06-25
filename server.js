@@ -2,6 +2,7 @@
 require('dotenv').config();
 // Requiring express
 const express = require('express');
+const cookieParser = require('cookie-parser');
 // Creating the express server and storing inside the app variable
 const app = express();
 
@@ -15,6 +16,7 @@ const userRouter = require('./routes/users.js');
 
 // Configuring the server to accept and parse JSON data.
 app.use(express.json());
+app.use(cookieParser());
 
 //Custom Middlware
 app.use((req, res, next) => {

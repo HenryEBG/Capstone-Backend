@@ -1,17 +1,17 @@
 const { Router } = require('express');
-const usersCtrl = require('../controllers/places.js');
-
+const placesCtrl = require('../controllers/places.js');
+const {validateToken }= require('../middlewares/validateToken.js')
 const router = Router();
 
-router.post('/', usersCtrl.createPlace);
+router.post('/',validateToken, placesCtrl.createPlace);
 
-router.get('/', usersCtrl.listPlaces);
+router.get('/', validateToken, placesCtrl.listPlaces);
 
-router.get('/:id', usersCtrl.showPlace);
+router.get('/:id', validateToken, placesCtrl.listPlace);
 
-router.delete('/:id', usersCtrl.deletePlace);
+router.delete('/:id', validateToken, placesCtrl.deletePlace);
 
-router.patch('/:id', usersCtrl.modifyPlace);
+router.patch('/:id', validateToken, placesCtrl.updatePlace);
 
 
 

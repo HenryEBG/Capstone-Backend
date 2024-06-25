@@ -1,18 +1,25 @@
 const { Router } = require('express');
 const usersCtrl = require('../controllers/users.js');
-
+const {validateToken }= require('../middlewares/validateToken.js')
 const router = Router();
 
 router.post('/', usersCtrl.createUser);
 
-router.get('/', usersCtrl.listUsers);
 
-router.get('/login', usersCtrl.loginUser);
 
-router.get('/:id', usersCtrl.showUser);
+router.post('/login', usersCtrl.loginUser);
 
-router.delete('/:id', usersCtrl.deleteUser);
+router.post('/logout', usersCtrl.logoutUser);
 
-router.patch('/:id', usersCtrl.modifyUser);
+// the next routes are protected routes that use validateToken before
+// execute
+
+router.get('/', validateToken,usersCtrl.listUsers);
+
+router.get('/:id', validateToken, usersCtrl.showUser);
+
+router.delete('/:id', validateToken, usersCtrl.deleteUser);
+
+router.put('/:id', validateToken, usersCtrl.updateUser);
 
 module.exports = router;
