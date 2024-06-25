@@ -6,6 +6,7 @@ async function validateToken(req,res,next){
   verify(token,"SL0rEnxSiJMLLDGqycuKbfLpSbc6CW5baqW7w0Qt",(err,user) => {
     if(err) return res.status(403).json({message: "Invalid token, authorization denied"})
    //console.log(user)
+  req.user = user
     next()
   })
 }

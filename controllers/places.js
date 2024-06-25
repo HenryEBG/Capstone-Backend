@@ -4,9 +4,24 @@ module.exports = {
   
   async function createPlace(req, res) { 
     try {
-      const createdPlace = await Place.create(req.body);
+      console.log(req.user);
+     const newPlace = new Place ({
+      name : req.body.name,
+      photo : req.body.photo,
+      description:req.body.description,
+      phone:req.body.phone,
+      email:req.body.email,
+      url:req.body.url,
+      placeType:req.body.placeType,
+      address:req.body.address,
+      location:req.body.location,
+      user:req.user.id
+     });
+     console.log(newPlace)
+      const createdPlace = await newPlace.save();
+      if(!createdPlace) return res.status(404).json("error")
       res.status(201).send(createdPlace);
-    } catch (error) {
+    } catch (err) {
       res.status(400).json(err);
     }
   };
@@ -24,7 +39,7 @@ module.exports = {
       const place = await Place.findById(req.params.id)
       if(!place) return res.status(404).json("Place not found")
       res.json(place)
-    } catch (error) {
+    } catch (err) {
       res.status(400).json(err);
     }
    };

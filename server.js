@@ -13,6 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 // Requiring example router
 const userRouter = require('./routes/users.js');
+const placesRouter = require('./routes/places.js');
 
 // Configuring the server to accept and parse JSON data.
 app.use(express.json());
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 
 // Connecting the router to the server
 app.use('/api/users', userRouter);
+app.use('/api/places', placesRouter);
 
 
 // Error Handling Middlware

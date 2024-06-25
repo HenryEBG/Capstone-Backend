@@ -11,7 +11,7 @@ router.get('/:id', validateToken, placesCtrl.listPlace);
 
 router.delete('/:id', validateToken, placesCtrl.deletePlace);
 
-router.patch('/:id', validateToken, placesCtrl.updatePlace);
+router.put('/:id', validateToken, placesCtrl.updatePlace);
 
 
 
