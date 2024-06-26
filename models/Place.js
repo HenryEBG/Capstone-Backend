@@ -15,4 +15,6 @@ const placeSchema =  Schema({
   user: {type:mongoose.Schema.Types.ObjectId,ref:'User',required:true}
 },{timestamps:true});
 
+placeSchema.set("autoIndex", false);
+placeSchema.index({ name: 1, placeType: 1 });
 module.exports = model('Place', placeSchema);
