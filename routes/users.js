@@ -9,6 +9,7 @@ const upload = require('../libs/storage.js')
 
 //router.post('/', upload.single('photo'), usersCtrl.createUser);
 router.post('/',  usersCtrl.createUser);
+
 router.post('/login',  usersCtrl.loginUser);
 
 router.post('/logout', usersCtrl.logoutUser);
@@ -17,7 +18,7 @@ router.post('/logout', usersCtrl.logoutUser);
 // execute
 
 // router.get('/', validateToken,usersCtrl.listUsers);
-router.get('/', usersCtrl.listUsers);
+ router.get('/', usersCtrl.listUsers);
 // router.get('/:id', validateToken, usersCtrl.showUser);
 router.get('/:id',  usersCtrl.showUser);
 

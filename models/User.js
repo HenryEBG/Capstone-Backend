@@ -65,4 +65,7 @@ const userSchema =  Schema({
 
 },{timestamps:true});
 
+userSchema.set("autoIndex", false);
+userSchema.index({ username: 1, name: 1 });
+
 module.exports = model('User', userSchema);

@@ -59,7 +59,7 @@ async function loginUser(req, res) {
 
     const token = await createToken({ id: foundUser._id });
     res.cookie("token", token);
-    console.log(res)
+    // console.log(res)
     foundUser.password = "";
     //we make the response to the client
     res.status(201).send(foundUser);
@@ -72,7 +72,7 @@ async function loginUser(req, res) {
 async function logoutUser(req,res) {
   try {
     res.cookie("token","",{expires:new Date(0)})
-    res.sendStatus(200)  
+    res.sendStatus(200).json("todo bien")  
   } catch (err) {
     res.status(400).json(err)
   }
