@@ -5,14 +5,14 @@ const userSchema =  Schema({
   username : {
     type: String,
     required: true,
-    unique: true,
+    // unique: true,
     min: 5,
     trim:true
   },
 
-  photo : {
-    type: String,
-  },
+  // photo : {
+  //   type: String,
+  // },
 
   password: {
     type: String,
@@ -22,7 +22,6 @@ const userSchema =  Schema({
 
   phone: {
     type: String,
-    required: false,
     unique: false,
     min: 10,
   },
@@ -30,7 +29,7 @@ const userSchema =  Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
+    // unique: true,
     lowercase : true,
     trim:true
 
@@ -44,24 +43,23 @@ const userSchema =  Schema({
   },
 
   userType : {
-    type: Number,
+    type:String,
     required: true,
   },
 
-  address : {
     street : { type: String },
     city : { type: String },
     state : {type:String},
-    zipcode : {type: Number, min:5}
-  },
+    zipcode : {type: String, min:5},
 
-  country : Number,
 
-  region :  Number,
+  country : String,
 
-  religion : Number,
+  region :  String,
 
-  Gender : {type: String, maxlenght:1}
+  religion : String,
+
+  gender : {type: String}
   
 
 

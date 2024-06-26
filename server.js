@@ -3,21 +3,25 @@ require('dotenv').config();
 // Requiring express
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const cors = require("cors");
 // Creating the express server and storing inside the app variable
 const app = express();
 
-//use cors to let calls from other server
-// app.use(cors())
-
-// Port in which the server will run on
-const PORT = process.env.PORT || 8000;
 // Requiring example router
 const userRouter = require('./routes/users.js');
 const placesRouter = require('./routes/places.js');
 
+//use cors to let calls from other server
+ app.use(cors())
+
+// Port in which the server will run on
+const PORT = process.env.PORT || 8000;
+
+
 // Configuring the server to accept and parse JSON data.
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static('public'));
 
 //Custom Middlware
 app.use((req, res, next) => {
